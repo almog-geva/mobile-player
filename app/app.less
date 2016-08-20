@@ -1,42 +1,48 @@
-html,
-body {
+html, body {
   height: 100%;
 }
+
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
   margin-bottom: 2em;
   padding: 0 0 0.5em;
 }
+
 .menu:before {
   content: "[";
 }
+
 .menu:after {
   content: "]";
 }
+
 .menu > li {
   display: inline;
 }
+
 .menu > li:before {
   content: "|";
   padding-right: 0.3em;
 }
+
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
 }
+
 .player-wrapper {
   display: flex;
   justify-content: center;
   height: 100%;
-}
-.player-wrapper player-container {
-  display: flex;
-  width: 1200px;
-}
-.player-wrapper player-container player-timeline {
-  flex: 1;
-}
-.player-wrapper player-container player-preview {
-  flex: 2;
+  player-container {
+    display: flex;
+    width: 1200px;
+    player-timeline {
+      flex: 1;
+    }
+    player-preview {
+      flex: 2
+    }
+  }
 }

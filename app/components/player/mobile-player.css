@@ -1,0 +1,174 @@
+player-timeline .hit-list {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+player-timeline .hit-list .repeated-item {
+  display: flex;
+  align-items: center;
+  flex: 0 0 30px;
+  border-bottom: 1px solid #ebebeb;
+  font-size: 14px;
+  cursor: pointer;
+}
+player-timeline .hit-list .repeated-item:hover {
+  background-color: lightcyan;
+}
+player-preview {
+  flex: 1;
+}
+player-preview .player-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+player-preview .marvel-device {
+  margin: 8px;
+}
+player-preview .marvel-device.landscape.s5 .speaker {
+  left: initial !important;
+  right: 20px;
+}
+player-preview .marvel-device.landscape.s5 .sensor {
+  bottom: 110px;
+  top: initial !important;
+}
+player-preview .marvel-device.landscape.s5 .sensor:after {
+  left: initial !important;
+  top: -12px;
+}
+player-preview .marvel-device.landscape.s5 .camera {
+  top: initial !important;
+  bottom: 42px;
+}
+player-preview .marvel-device.tilt-landscape {
+  animation: rotate-right 0.8s;
+}
+player-preview .marvel-device.tilt-landscape .preview-img {
+  animation: rotate-left 0.3s linear 0.5s;
+}
+player-preview .marvel-device.tilt-portrait {
+  animation: rotate-left 0.8s;
+}
+player-preview .marvel-device.tilt-portrait .preview-img {
+  animation: rotate-right 0.3s linear 0.5s;
+}
+player-preview .preview-img {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+player-preview .snapshot-container {
+  position: relative;
+  overflow: hidden;
+}
+player-preview .snapshot-container .tap-annotation {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 250, 49, 0.8);
+  visibility: hidden;
+}
+player-preview .snapshot-container .tap-annotation.animated.fadeIn {
+  animation-duration: 0.1s;
+}
+player-preview .snapshot-container .tap-annotation.animated.fadeOut {
+  animation-delay: 0.1s;
+  animation-duration: 1.4s;
+}
+player-preview .snapshot-container .tap-annotation.visible {
+  visibility: visible;
+}
+.cbutton {
+  position: relative;
+  display: inline-block;
+  margin: 1em;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #3c8ddc;
+  font-size: 1.4em;
+  transition: color 0.7s;
+}
+.cbutton.cbutton--click,
+.cbutton:focus {
+  outline: none;
+}
+.cbutton__icon {
+  display: block;
+}
+.cbutton__text {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.cbutton::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -20px 0 0 -20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+.cbutton--effect-radomir::after {
+  box-shadow: inset 0 0 0 25px rgba(111, 148, 182, 0);
+}
+.cbutton--effect-radomir.cbutton--click::after {
+  -webkit-animation: anim-effect-radomir 0.8s ease-out forwards;
+  animation: anim-effect-radomir 0.8s ease-out forwards;
+}
+@-webkit-keyframes anim-effect-radomir {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale3d(0.4, 0.4, 1);
+    transform: scale3d(0.4, 0.4, 1);
+  }
+  80% {
+    box-shadow: inset 0 0 0 2px rgba(111, 148, 182, 0.8);
+    opacity: 0.1;
+  }
+  100% {
+    box-shadow: inset 0 0 0 2px rgba(111, 148, 182, 0.8);
+    opacity: 0;
+    -webkit-transform: scale3d(1.2, 1.2, 1);
+    transform: scale3d(1.2, 1.2, 1);
+  }
+}
+@keyframes anim-effect-radomir {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale3d(0.4, 0.4, 1);
+    transform: scale3d(0.4, 0.4, 1);
+  }
+  80% {
+    box-shadow: inset 0 0 0 2px rgba(111, 148, 182, 0.8);
+    opacity: 0.1;
+  }
+  100% {
+    box-shadow: inset 0 0 0 2px rgba(111, 148, 182, 0.8);
+    opacity: 0;
+    -webkit-transform: scale3d(1.2, 1.2, 1);
+    transform: scale3d(1.2, 1.2, 1);
+  }
+}
+@keyframes rotate-right {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(90deg);
+  }
+}
+@keyframes rotate-left {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-90deg);
+  }
+}

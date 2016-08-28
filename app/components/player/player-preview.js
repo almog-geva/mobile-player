@@ -13,13 +13,24 @@ angular.module('gbMobilePlayer')
                 var defaults = {
                     minHeight: 400,
                     padding: 250,
-                    tapDiameter: 40
+                    tapDiameter: 40,
+                    avgSwipeSpeed: 700
                 };
 
                 scope.previewSnapshot = null;
+                scope.showDevice = false;
+
+                var player = {
+                    currentHit: 0,
+                    state: 'pause'
+                };
+
+                scope.player = player;
 
                 var deviceElem = elem.find('.device');
                 var container = elem.find('.player-container');
+                var snapshotContainer = elem.find('.snapshot-container');
+                var playElem = container.find('.action.play');
 
                 var boxSize = Math.max(defaults.minHeight + defaults.padding, Math.min(elem.width(), elem.height()));
                 container.width(boxSize).height(boxSize);
@@ -27,7 +38,7 @@ angular.module('gbMobilePlayer')
                 var listener = scope.$watch("hits", function (hits) {
                     if (!_.isEmpty(hits)) {
                         scope.device = hits[0].device;
-                        scope.device.ratio = Math.abs(scope.device.screenWidth / scope.device.screenHeight);
+                        scope.device.ratio = Math.abs(scope.device.screenResolution.x / scope.device.screenResolution.y);
                         scope.device.maxWidth = scope.device.screenResolution.x / scope.device.compressionValues.scaleFactor;
                         scope.device.maxHeight = scope.device.screenResolution.y / scope.device.compressionValues.scaleFactor;
                         scope.device.height = Math.max(defaults.minHeight, Math.min(boxSize - defaults.padding, scope.device.maxHeight));
@@ -35,11 +46,48 @@ angular.module('gbMobilePlayer')
                         scope.device.scaleFactor = scope.device.screenResolution.y / scope.device.height;
                         scope.device.tapDiameter = defaults.tapDiameter - (3 * scope.device.scaleFactor);
 
+                        sendMessage({ 'deviceSize': { width: scope.device.width, height: scope.device.height } });
+
                         setDeviceSize();
+                        scope.showDevice = true;
+
+                        setPreviewSnapshot(hits[0]);
 
                         listener();
                     }
                 });
+
+                var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+
+                scope.play = function() {
+                    player.state = 'play';
+
+                    playElem.addClass('off').one(animationEnd, function () {
+                        playElem.removeClass('off').hide();
+                    });
+
+                    /*if (player.currentHit !== 0) {
+                        ++player.currentHit;
+                    }*/
+
+                    playHit(player.currentHit);
+                };
+
+                scope.pause = function() {
+                    player.state = 'pause';
+                    $('.tap-annotation').remove();
+                    playElem.show();
+                };
+
+                function playHit(index) {
+                    sendMessage({ action: 'simulate-hit', hitIndex: index});
+                    simulateHit(index);
+                    $timeout(function() {
+                        if (scope.hits[player.currentHit] && player.state === 'play') {
+                            playHit(++player.currentHit);
+                        }
+                    }, 2000);
+                }
 
                 if (controller) {
                     controller.onMessage('preview', function (data) {
@@ -48,7 +96,11 @@ angular.module('gbMobilePlayer')
                         }
 
                         if (data.action === 'simulate-hit') {
-                            simulateHit(data.hitIndex);
+                            playElem.hide();
+                            simulateHit(data.hitIndex, function() {
+                                playElem.show();
+                            });
+                            player.currentHit = data.hitIndex;
                         }
                     });
                 }
@@ -61,16 +113,16 @@ angular.module('gbMobilePlayer')
 
                 function setDeviceSize(isLandscape) {
                     if (isLandscape) {
-                        deviceElem.width(scope.device.height).height(scope.device.width);
+                        snapshotContainer.width(scope.device.height).height(scope.device.width);
                     }
                     else {
-                        deviceElem.width(scope.device.width).height(scope.device.height);
+                        snapshotContainer.width(scope.device.width).height(scope.device.height);
                     }
                 }
 
                 function setPreviewSnapshot(hit) {
                     setOrientation(hit.device.orientation.toLowerCase());
-                    scope.previewSnapshot = "data:image/jpg;base64," + hit.snapshot;
+                    scope.previewSnapshot = "url(data:image/jpg;base64," + hit.snapshot + ")";
                 }
 
                 function setOrientation(orientation) {
@@ -84,8 +136,12 @@ angular.module('gbMobilePlayer')
                     }
                 }
 
-                function simulateHit(hitIndex) {
+                function simulateHit(hitIndex, callback) {
                     var hit = scope.hits[hitIndex];
+
+                    if (!callback) {
+                        callback = angular.noop;
+                    }
 
                     if (!_.has(hit, 'userEvent.action')) {
                         console.error('Action event is missing', hit);
@@ -99,13 +155,16 @@ angular.module('gbMobilePlayer')
                     }
                     else if (action === 'tap') {
                         setPreviewSnapshot(hit);
-                        tapEffect(hit);
+                        tapEffect(hit, function(){
+                            callback();
+                        });
                     }
                     else if (action === 'swipe' || action === 'zoom in' || action === 'zoom out') {
                         var previousHit = scope.hits[hitIndex - 1];
                         setPreviewSnapshot(previousHit);
                         swipeEffect(hit, function() {
                             setPreviewSnapshot(hit);
+                            callback();
                         });
                     }
                     else if (action === 'tilt') {
@@ -113,17 +172,16 @@ angular.module('gbMobilePlayer')
                         setPreviewSnapshot(hit);
                         tiltEffect(hit, function() {
                             setPreviewSnapshot(nextHit);
+                            callback();
                         });
                     }
                 }
-
-                var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
 
                 function tapAnnotationElement() {
                     return $('<div class="tap-annotation cbutton cbutton--effect-radomir"><div/>');
                 }
 
-                function tapEffect(hit) {
+                function tapEffect(hit, callback) {
                     if (!_.has(hit, 'userEvent.coordinate')) {
                         return;
                     }
@@ -142,12 +200,15 @@ angular.module('gbMobilePlayer')
                         top: coords.y
                     });
 
-                    $('.snapshot-container').append(tapAnnotation);
+                    snapshotContainer.append(tapAnnotation);
 
                     tapAnnotation.addClass('animated fadeIn visible cbutton--click').one(animationEnd, function () {
                         tapAnnotation.removeClass('animated fadeIn');
                         tapAnnotation.addClass('animated fadeOut').one(animationEnd, function () {
-                           tapAnnotation.remove();
+                          tapAnnotation.remove();
+                            if (callback) {
+                                callback();
+                            }
                         });
                     });
                 }
@@ -172,7 +233,6 @@ angular.module('gbMobilePlayer')
                         adjustCoords(coords);
                     });
 
-                    var container = $('.snapshot-container');
                     var i, avgDistance = 0, tapAnnotations = [];
                     for (i = 0; i < coords.start.length; i++) {
                         var tapAnnotation = tapAnnotationElement();
@@ -185,19 +245,18 @@ angular.module('gbMobilePlayer')
                             });
 
                         tapAnnotations.push(tapAnnotation);
-                        container.append(tapAnnotation);
+                        snapshotContainer.append(tapAnnotation);
 
                         avgDistance += distance(coords.start[i], coords.end[i]);
                     }
 
                     avgDistance = avgDistance / coords.start.length;
-                    var duration = avgDistance > 500 ? 900 : avgDistance > 300 ? 700 : 500;
+                    var duration = avgDistance > 500 ? defaults.avgSwipeSpeed + 200 : avgDistance > 300 ? defaults.avgSwipeSpeed : defaults.avgSwipeSpeed - 200;
 
                     for (i = 0; i < coords.start.length; i++) {
                         tapAnnotations[i].animate({
                                 left: coords.end[i].x,
-                                top: coords.end[i].y,
-                                opacity: '0.8'
+                                top: coords.end[i].y
                             }, duration, (function (j) {
                                 return function () {
                                     tapAnnotations[j].animate({opacity: '0'}, 200, function () {

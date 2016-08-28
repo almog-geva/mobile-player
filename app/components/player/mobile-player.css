@@ -1,7 +1,33 @@
+player-timeline {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid #f5f5f5;
+}
+player-timeline .hit-list-header {
+  display: flex;
+  flex: 0 0 30px;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e4e4e4;
+}
+player-timeline .hit-list-header > div {
+  padding-left: 5px;
+}
+player-timeline .hit-list-header .time {
+  flex: 0 0 60px;
+}
 player-timeline .hit-list {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  flex: 1;
+  max-height: 100%;
+  overflow: auto;
+  padding-right: 10px;
+}
+player-timeline .hit-list .scroll-content {
+  display: flex;
+  flex-direction: column;
 }
 player-timeline .hit-list .repeated-item {
   display: flex;
@@ -10,20 +36,102 @@ player-timeline .hit-list .repeated-item {
   border-bottom: 1px solid #ebebeb;
   font-size: 14px;
   cursor: pointer;
+  background-color: rgba(229, 239, 250, 0);
+}
+player-timeline .hit-list .repeated-item.selected {
+  background-color: #e5effa;
+  transition: background 300ms ease-in;
 }
 player-timeline .hit-list .repeated-item:hover {
-  background-color: lightcyan;
+  background-color: #e5effa;
+}
+player-timeline .hit-list .repeated-item > div {
+  padding-left: 5px;
+}
+player-timeline .hit-list .repeated-item .time {
+  flex: 0 0 60px;
+}
+player-timeline .hit-list .repeated-item .action {
+  padding-left: 20px;
+  max-width: 350px;
+  padding-right: 5px;
+  display: flex;
+  align-items: center;
+}
+player-timeline .hit-list .repeated-item .action .desc {
+  padding-top: 4px;
+}
+player-timeline .hit-list .repeated-item .action .action-icon {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+  display: inline-block;
+}
+player-timeline .hit-list .repeated-item .action.view-loaded {
+  padding-left: 0;
+}
+player-timeline .hit-list .repeated-item .action.view-loaded .action-icon {
+  background-image: url('images/smartphone.svg');
+}
+player-timeline .hit-list .repeated-item .action.swipe .action-icon {
+  background-image: url('images/swipe-up.svg');
+}
+player-timeline .hit-list .repeated-item .action.tap .action-icon {
+  background-image: url('images/tap-button.svg');
+}
+player-timeline .hit-list .repeated-item .action.zoom-in .action-icon {
+  background-image: url('images/zoom-in.svg');
+}
+player-timeline .hit-list .repeated-item .action.zoom-out .action-icon {
+  background-image: url('images/zoom-out.svg');
+}
+player-timeline .hit-list .repeated-item .action.tilt .action-icon {
+  background-image: url('images/rotate.svg');
+}
+player-timeline .hit-list .repeated-item .action.navigate-back .action-icon {
+  background-image: url('images/left-arrow.svg');
+  height: 16px;
 }
 player-preview {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 player-preview .player-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+player-preview .player-container .player-actions {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+player-preview .player-container .player-actions .action {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2) no-repeat;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+  margin-left: 5px;
+}
+player-preview .player-container .player-actions .action.play {
+  background-image: url('images/play-rounded-button-outline.svg');
+  cursor: pointer;
+}
+player-preview .player-container .player-actions .action.play.off {
+  animation: fadeOut .5s;
 }
 player-preview .marvel-device {
   margin: 8px;
+  width: auto !important;
+  height: auto !important;
 }
 player-preview .marvel-device.landscape.s5 .speaker {
   left: initial !important;
@@ -67,15 +175,17 @@ player-preview .snapshot-container {
 player-preview .snapshot-container .tap-annotation {
   position: absolute;
   border-radius: 50%;
-  background-color: rgba(255, 250, 49, 0.8);
+  background-color: rgba(255, 250, 49, 0.85);
+  box-shadow: 0 1px 1px 0 grey;
   visibility: hidden;
 }
 player-preview .snapshot-container .tap-annotation.animated.fadeIn {
   animation-duration: 0.1s;
+  animation-delay: 0.2s;
 }
 player-preview .snapshot-container .tap-annotation.animated.fadeOut {
-  animation-delay: 0.1s;
-  animation-duration: 1.4s;
+  animation-delay: 0.2s;
+  animation-duration: 1s;
 }
 player-preview .snapshot-container .tap-annotation.visible {
   visibility: visible;
@@ -83,7 +193,6 @@ player-preview .snapshot-container .tap-annotation.visible {
 .cbutton {
   position: relative;
   display: inline-block;
-  margin: 1em;
   padding: 0;
   border: none;
   background: none;
@@ -121,6 +230,7 @@ player-preview .snapshot-container .tap-annotation.visible {
 .cbutton--effect-radomir.cbutton--click::after {
   -webkit-animation: anim-effect-radomir 0.8s ease-out forwards;
   animation: anim-effect-radomir 0.8s ease-out forwards;
+  animation-delay: 0.2s;
 }
 @-webkit-keyframes anim-effect-radomir {
   0% {

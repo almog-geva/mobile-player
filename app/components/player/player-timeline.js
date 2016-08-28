@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gbMobilePlayer')
-    .directive('playerTimeline', function($timeout, $interval) {
+    .directive('playerTimeline', function($timeout, ScrollbarService) {
         return {
             templateUrl: 'components/player/player-timeline.tmpl.html',
             require: '?^^playerContainer',
@@ -10,13 +10,43 @@ angular.module('gbMobilePlayer')
             },
             link: function(scope, elem, attrs, controller) {
 
+                var timestampStart, deviceHeight;
+
+                scope.selectedHit = undefined;
+
+                var scrollbar;
+
+                ScrollbarService.getInstance('hit_list')
+                    .then(function(instance) {
+                        scrollbar = instance;
+                    });
+
+                var listener = scope.$watch("hits", function (hits) {
+                    if (!_.isEmpty(hits)) {
+                        timestampStart = hits[0].timeStamp;
+
+                        listener();
+                    }
+                });
+
                 if (controller) {
                     controller.onMessage('timeline', function(data) {
-                        
+                        if (!data) {
+                            return;
+                        }
+
+                        if (data.deviceSize) {
+                            deviceHeight = data.deviceSize.height;
+                            elem.find('.hit-list').height(data.deviceSize.height);
+                        }
+                        else if (data.action && data.action === 'simulate-hit') {
+                            simulateHit(data.hitIndex);
+                        }
                     });
                 }
 
                 scope.onHitClick = function(index) {
+                    scope.selectedHit = index;
                     sendMessage({ action: 'simulate-hit', hitIndex: index});
                 };
 
@@ -26,16 +56,30 @@ angular.module('gbMobilePlayer')
                     }
                 }
 
-                $timeout(function() {
-                    for (var i = 0; i < scope.hits.length; i++) {
-                        (function(j) {
-                            $timeout(function() {
-                                scope.onHitClick(j);
+                scope.hitTimeOffset = function(timestamp) {
+                    var timeOffset = new Date(timestamp - timestampStart);
+                    var minutes = timeOffset.getMinutes();
+                    var seconds = timeOffset.getSeconds();
+                    return (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+                };
 
-                            }, j * 1500);
-                        })(i);
+                scope.actionLabel = function(index) {
+                    var label = scope.hits[index].userEvent.action;
+                    if (label.toLowerCase() === 'view loaded') {
+                        label = scope.hits[index].userEvent.control.description;
                     }
-                });
+
+                    return label;
+                };
+
+                scope.action = function(index) {
+                    return _.kebabCase(scope.hits[index].userEvent.action);
+                };
+
+                function simulateHit(index) {
+                    scope.selectedHit = index;
+                    scrollbar.scrollIntoView($('.repeated-item.' + index)[0], { offsetTop: deviceHeight ? (deviceHeight / 2) : 100 });
+                }
             }
         }
     });

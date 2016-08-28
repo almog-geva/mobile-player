@@ -1,4 +1,10 @@
-<h3>Timeline</h3>
-<div class="hit-list">
-    <div ng-repeat="hit in hits" class="repeated-item" ng-click="onHitClick($index)">{{hit.userEvent.action}}</div>
+<div class="hit-list-header">
+    <div class="time">Time</div>
+    <div class="action">Action</div>
+</div>
+<div class="hit-list" scrollbar="hit_list" always-show-tracks="true" overscroll-effect="'bounce'">
+    <div ng-repeat="hit in hits" class="repeated-item {{$index}}" ng-click="onHitClick($index)" ng-class="{selected: selectedHit === $index}">
+        <div class="time">{{::hitTimeOffset(hit.timeStamp)}}</div>
+        <div class="action ellipsis {{::action($index)}}"><span class="action-icon"></span><span class="desc ellipsis">{{::actionLabel($index)}}</span></div>
+    </div>
 </div>

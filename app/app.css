@@ -2,6 +2,10 @@ html,
 body {
   height: 100%;
 }
+body {
+  font-family: 'Roboto', sans-serif;
+  background: rgba(66, 66, 66, 0.91);
+}
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -25,16 +29,48 @@ body {
   content: "";
   padding: 0;
 }
+.ellipsis {
+  white-space: nowrap;
+  text-align: start;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 .player-wrapper {
   display: flex;
   justify-content: center;
-  height: 100%;
+  height: 90%;
 }
 .player-wrapper player-container {
   display: flex;
   width: 1200px;
+  background: white;
+  margin: 20px;
+  border-radius: 4px;
+  overflow: auto;
 }
-.player-wrapper player-container player-timeline {
+.player-wrapper player-container .left-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e0e0e0;
+  padding: 0 10px;
+  margin: 10px 0;
+}
+.player-wrapper player-container .left-pane .replay-header {
+  display: flex;
+  font-size: 27px;
+  font-weight: 300;
+  flex: 0 0 33px;
+  margin-bottom: 20px;
+}
+.player-wrapper player-container .left-pane .replay-header .video-img {
+  background: url('components/player/images/video-player.svg') no-repeat;
+  width: 33px;
+  height: 33px;
+  display: inline-block;
+  margin-right: 10px;
+}
+.player-wrapper player-container .left-pane player-timeline {
   flex: 1;
 }
 .player-wrapper player-container player-preview {

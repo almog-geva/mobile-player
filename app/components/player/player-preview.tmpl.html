@@ -1,12 +1,12 @@
-<div class="player-container">
+<div class="player-container" ng-show="showDevice">
     <div class="device marvel-device s5 black">
         <div class="top-bar"></div>
         <div class="sleep"></div>
         <div class="camera"></div>
         <div class="sensor"></div>
         <div class="speaker"></div>
-        <div class="screen snapshot-container">
-            <div class="preview-img" style="background-image:url({{previewSnapshot}})"></div>
+        <div class="screen snapshot-container" ng-click="pause()">
+            <div class="preview-img" ng-style="{'background-image': previewSnapshot}"></div>
         </div>
         <div class="home"></div>
     </div>
@@ -24,4 +24,7 @@
         <div class="home"></div>
         <div class="bottom-bar"></div>
     </div>-->
+    <div class="player-actions">
+        <div class="action play" ng-click="play()"></div>
+    </div>
 </div>

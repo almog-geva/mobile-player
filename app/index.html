@@ -6,10 +6,12 @@
         <title>My AngularJS App</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
         <link rel="stylesheet" href="bower_components/animate.css/animate.css">
         <link rel="stylesheet" href="bower_components/devices.css/assets/devices.min.css">
+        <link rel="stylesheet" href="bower_components/smooth-scrollbar/dist/smooth-scrollbar.css">
         <link rel="stylesheet" href="app.css">
         <link rel="stylesheet" href="components/player/mobile-player.css">
         <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
@@ -24,7 +26,10 @@
 
         <div class="player-wrapper">
             <player-container>
-                <player-timeline hits="main.sessionHits"></player-timeline>
+                <div class="left-pane">
+                    <div class="replay-header"><span class="video-img"></span>Session Recording</div>
+                    <player-timeline hits="main.sessionHits"></player-timeline>
+                </div>
                 <player-preview hits="main.sessionHits"></player-preview>
             </player-container>
         </div>
@@ -36,6 +41,8 @@
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
         <script src="bower_components/lodash/dist/lodash.js"></script>
+        <script src="bower_components/smooth-scrollbar/dist/smooth-scrollbar.js"></script>
+        <script src="bower_components/angular-smooth-scrollbar/dist/angular-smooth-scrollbar.js"></script>
         <script src="app.js"></script>
         <script src="view1/view1.js"></script>
         <script src="view2/view2.js"></script>

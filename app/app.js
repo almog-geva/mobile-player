@@ -16,7 +16,7 @@ angular.module('myApp', [
 
     self.sessionHits = {};
     
-    $http.get('data/mobile-hits2.json')
+    $http.get('data/mobile-hits.json')
         .then(function(resp) {
             self.sessionHits = resp.data;
         });

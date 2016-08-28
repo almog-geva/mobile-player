@@ -1,6 +1,6 @@
 @tap-animation-delay: .2s;
 
-player-timeline {
+replay-timeline {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -109,11 +109,12 @@ player-timeline {
   }
 }
 
-player-preview {
+replay-player {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: auto;
   .player-container {
     display: flex;
     justify-content: center;

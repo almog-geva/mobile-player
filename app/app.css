@@ -35,12 +35,12 @@ body {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.player-wrapper {
+.replay-wrapper {
   display: flex;
   justify-content: center;
   height: 90%;
 }
-.player-wrapper player-container {
+.replay-wrapper replay-container {
   display: flex;
   width: 1200px;
   background: white;
@@ -48,7 +48,7 @@ body {
   border-radius: 4px;
   overflow: auto;
 }
-.player-wrapper player-container .left-pane {
+.replay-wrapper replay-container .left-pane {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -56,23 +56,23 @@ body {
   padding: 0 10px;
   margin: 10px 0;
 }
-.player-wrapper player-container .left-pane .replay-header {
+.replay-wrapper replay-container .left-pane .replay-header {
   display: flex;
   font-size: 27px;
   font-weight: 300;
   flex: 0 0 33px;
   margin-bottom: 20px;
 }
-.player-wrapper player-container .left-pane .replay-header .video-img {
-  background: url('components/player/images/video-player.svg') no-repeat;
+.replay-wrapper replay-container .left-pane .replay-header .video-img {
+  background: url('components/mobile-replay/images/video-player.svg') no-repeat;
   width: 33px;
   height: 33px;
   display: inline-block;
   margin-right: 10px;
 }
-.player-wrapper player-container .left-pane player-timeline {
+.replay-wrapper replay-container .left-pane replay-timeline {
   flex: 1;
 }
-.player-wrapper player-container player-preview {
+.replay-wrapper replay-container replay-player {
   flex: 2;
 }

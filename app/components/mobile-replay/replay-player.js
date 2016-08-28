@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('gbMobilePlayer')
-    .directive('playerPreview', function ($timeout) {
+    .directive('replayPlayer', function ($timeout) {
         return {
-            templateUrl: 'components/player/player-preview.tmpl.html',
-            require: '?^^playerContainer',
+            templateUrl: 'components/mobile-replay/replay-player.tmpl.html',
+            require: '?^^replayContainer',
             scope: {
                 hits: '='
             },

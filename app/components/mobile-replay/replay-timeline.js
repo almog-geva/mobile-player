@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('gbMobilePlayer')
-    .directive('playerTimeline', function($timeout, ScrollbarService) {
+    .directive('replayTimeline', function($timeout, ScrollbarService) {
         return {
-            templateUrl: 'components/player/player-timeline.tmpl.html',
-            require: '?^^playerContainer',
+            templateUrl: 'components/mobile-replay/replay-timeline.tmpl.html',
+            require: '?^^replayContainer',
             scope: {
                 hits: '='
             },

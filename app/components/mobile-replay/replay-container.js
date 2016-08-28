@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gbMobilePlayer', ['SmoothScrollbar'])
-    .directive('playerContainer', function() {
+    .directive('replayContainer', function() {
         return {
             scope: {},
             controller: function() {

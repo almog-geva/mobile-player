@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="bower_components/devices.css/assets/devices.min.css">
         <link rel="stylesheet" href="bower_components/smooth-scrollbar/dist/smooth-scrollbar.css">
         <link rel="stylesheet" href="app.css">
-        <link rel="stylesheet" href="components/player/mobile-player.css">
+        <link rel="stylesheet" href="components/mobile-replay/mobile-replay.css">
         <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
     <body ng-controller="mainController as main">
@@ -24,14 +24,14 @@
 
         <!--<div ng-view></div>-->
 
-        <div class="player-wrapper">
-            <player-container>
+        <div class="replay-wrapper">
+            <replay-container>
                 <div class="left-pane">
                     <div class="replay-header"><span class="video-img"></span>Session Recording</div>
-                    <player-timeline hits="main.sessionHits"></player-timeline>
+                    <replay-timeline hits="main.sessionHits"></replay-timeline>
                 </div>
-                <player-preview hits="main.sessionHits"></player-preview>
-            </player-container>
+                <replay-player hits="main.sessionHits"></replay-player>
+            </replay-container>
         </div>
 
       <!-- In production use:
@@ -49,8 +49,8 @@
         <script src="components/version/version.js"></script>
         <script src="components/version/version-directive.js"></script>
         <script src="components/version/interpolate-filter.js"></script>
-        <script src="components/player/player-container.js"></script>
-        <script src="components/player/player-preview.js"></script>
-        <script src="components/player/player-timeline.js"></script>
+        <script src="components/mobile-replay/replay-container.js"></script>
+        <script src="components/mobile-replay/replay-player.js"></script>
+        <script src="components/mobile-replay/replay-timeline.js"></script>
     </body>
 </html>
